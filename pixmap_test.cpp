@@ -64,8 +64,10 @@ int main(int argc, char** argv)
 
    int y = (int) (0.5f * (image.width() - soup.width()));
    int x = (int) (0.5f * (image.height() - soup.height()));
+
    ppm_image background = image.subimage(x, y, soup.width(), soup.height());
    background.save("background-test.ppm");
+ 
    ppm_image blend = background.alpha_blend(soup, 0.5f);
    image.replace(blend, x, y);
    image.save("earth-blend-0.5.ppm");

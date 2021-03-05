@@ -69,5 +69,14 @@ namespace agl
 
      // return the height of the image
      int height() const;
+
+     // clean up the memory occupied by the object
+     void cleanup();
+
+   protected:
+      std::string format; // image format, e.g. "P3" by default
+      int w, h; // width and height of the image
+      int m; // maximum color value, e.g. "255" by default
+      int*** p; // 3D array that stores the pixels of the image. The dimension is h * w * 3 and he default value for a pixel is (0,0,0).
   };
 }
