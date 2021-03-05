@@ -16,6 +16,15 @@ int int_min(int a, int b){
    }
 }
 
+int int_max(int a, int b){
+   if (a <= b){
+      return b;
+   }
+   else{
+      return a;
+   }
+}
+
 ppm_image::ppm_image() 
 {
    // default constructor
@@ -369,6 +378,74 @@ ppm_image ppm_image::alpha_blend(const ppm_image& other, float alpha) const
    return result;
 }
 
+ppm_image ppm_image::darkest(const ppm_image& other) const
+{
+   ppm_image result(w,h);
+
+   // for each pixel, choose the lower rgb value between the two images
+   for (int i = 0; i < h; i++)
+   {
+      for (int j = 0; j < w; j++)
+      {
+         for (int k = 0; k < 3; k++)
+         {
+            result.p[i][j][k] = int_min(this->p[i][j][k], other.p[i][j][k]);
+         }
+      }
+   }
+
+   return result;
+}
+
+ppm_image ppm_image::lightest(const ppm_image& other) const
+{
+   ppm_image result(w,h);
+
+   // for each pixel, choose the higher rgb value between the two images
+   for (int i = 0; i < h; i++)
+   {
+      for (int j = 0; j < w; j++)
+      {
+         for (int k = 0; k < 3; k++)
+         {
+            result.p[i][j][k] = int_max(this->p[i][j][k], other.p[i][j][k]);
+         }
+      }
+   }
+
+   return result;
+}
+
+ppm_image ppm_image::difference(const ppm_image& other, float alpha) const
+{
+   // Return the original image if the inputs are not legal
+   try{
+      if (alpha < 0){
+          throw "WARNING: the given alpha for difference is supposed to be nonnegative!";
+      }
+   } catch (const char* msg) {
+      std::cout << msg << std::endl;
+      std::cout << alpha << " is given as for difference." << std::endl;
+      return *this;
+   }
+
+   ppm_image result(w,h);
+
+   // for each pixel, subtract the rgb values between the two images
+   for (int i = 0; i < h; i++)
+   {
+      for (int j = 0; j < w; j++)
+      {
+         for (int k = 0; k < 3; k++)
+         {
+            result.p[i][j][k] = int_max(0, floor(static_cast<double>(this->p[i][j][k]) - alpha * static_cast<double>(other.p[i][j][k])));
+         }
+      }
+   }
+
+   return result;
+}
+
 ppm_image ppm_image::gammaCorrect(float gamma) const
 {
    ppm_image result(w, h);
@@ -423,6 +500,299 @@ ppm_image ppm_image::grayscale() const
 
    return result;
 }
+
+ppm_image ppm_image::swirlcolor() const
+{
+   ppm_image result(w, h);
+
+   // rotate the colors of your image such that the red channel becomes the green channel, the green becomes blue, and the blue becomes red
+   for (int i = 0; i < h; i++)
+   {
+      for (int j = 0; j < w; j++)
+      {
+         for (int k = 0; k < 3; k++)
+         {
+            if (k == 2){
+               result.p[i][j][k] = this->p[i][j][0];
+            }
+            else{
+               result.p[i][j][k] = this->p[i][j][k+1];
+            }
+         }
+      }
+   }
+
+   return result;
+}
+
+ppm_image ppm_image::invert(float alpha) const
+{
+   // Return the original image if the inputs are not legal
+   try{
+      if (alpha < 0){
+          throw "WARNING: the given alpha for invert is supposed to be nonnegative!";
+      }
+   } catch (const char* msg) {
+      std::cout << msg << std::endl;
+      std::cout << alpha << " is given as for invert." << std::endl;
+      return *this;
+   }
+
+   ppm_image result(w, h);
+
+   // subtract the rgb value of each pixel * alpha from the maximum color value
+   for (int i = 0; i < h; i++)
+   {
+      for (int j = 0; j < w; j++)
+      {
+         for (int k = 0; k < 3; k++)
+         {
+            result.p[i][j][k] = int_min(0, floor(m - static_cast<double>(this->p[i][j][k]) * alpha));
+         }
+      }
+   }
+
+   return result;
+}
+
+ppm_image ppm_image::sobel(int threshold, bool reverse) const
+{
+   ppm_image result(w, h);
+
+   // define the kernels for the sobel operator
+   float gx[3][3] = {
+      {1, 0, -1},
+      {2, 0, -2},
+      {1, 0, -1}
+   };
+
+   float gy[3][3] = {
+      {1, 2, 1},
+      {0, 0, 0},
+      {-1, -2, -1}
+   };
+
+   // Add zero padder to the original image
+   int*** pz = new int**[h+2];
+   for (int i = 0; i < h+2; i++){
+
+      pz[i] = new int*[w+2];
+
+      for (int j = 0; j < w+2; j++){
+
+         pz[i][j] = new int[3];
+
+         for (int k = 0; k < 3; k++){
+            if (i == 0 || j == 0 || i == h+1 || j == w+1){
+               pz[i][j][k] = 0;
+            }
+            else{
+               pz[i][j][k] = p[i-1][j-1][k];
+            }
+         }
+      }
+   }
+
+   // apply the x-direction kernel and y-direction kernel to the image
+   float*** px = new float**[h];
+   for (int i = 0; i < h; i++){
+
+      px[i] = new float*[w];
+
+      for (int j = 0; j < w; j++){
+
+         px[i][j] = new float[3];
+
+         for (int k = 0; k < 3; k++){
+
+            px[i][j][k] = 0.0f;
+
+            for (int u = -1; u < 2; u++){
+
+               for (int v = -1; v < 2; v++){
+
+                  px[i][j][k] = px[i][j][k] + static_cast<double>(gx[u+1][v+1]) * static_cast<double>(pz[i + u + 1][j + v + 1][k]);
+
+               }
+            }
+         }
+      }
+   }
+
+   // apply the y-direction kernel and y-direction kernel to the image
+   float*** py = new float**[h];
+   for (int i = 0; i < h; i++){
+
+      py[i] = new float*[w];
+
+      for (int j = 0; j < w; j++){
+
+         py[i][j] = new float[3];
+
+         for (int k = 0; k < 3; k++){
+
+            py[i][j][k] = 0.0f;
+
+            for (int u = -1; u < 2; u++){
+
+               for (int v = -1; v < 2; v++){
+
+                  py[i][j][k] = py[i][j][k] + static_cast<double>(gy[u+1][v+1]) * static_cast<double>(pz[i + u + 1][j + v + 1][k]);
+
+               }
+            }
+         }
+      }
+   }
+
+   // output the image
+   for (int i = 0; i < h; i++){
+
+      for (int j = 0; j < w; j++){
+
+         for (int k = 0; k < 3; k++){
+            int mag = floor(pow(static_cast<double>(pow(static_cast<double>(px[i][j][k]), 2) + pow(static_cast<double>(py[i][j][k]), 2)), 0.5f));
+            if(reverse == false){
+               if(mag < threshold){
+                  result.p[i][j][k] = 0;
+               }
+               else{
+                  result.p[i][j][k] = m;
+               }
+            }
+            else{
+               if(mag < threshold){
+                  result.p[i][j][k] = m;
+               }
+               else{
+                  result.p[i][j][k] = 0;
+                  }
+            }
+         }
+      }
+   }
+
+   return result;
+}
+
+ppm_image ppm_image::sharpen() const
+{
+   ppm_image result(w, h);
+
+   // define the kernel for the sharpen operator
+   float ker[3][3] = {
+      {0, -1, 0},
+      {-1, 5, -1},
+      {0, -1, 0}
+   };
+
+   // Add zero padder to the original image
+   int*** pz = new int**[h+2];
+   for (int i = 0; i < h+2; i++){
+
+      pz[i] = new int*[w+2];
+
+      for (int j = 0; j < w+2; j++){
+
+         pz[i][j] = new int[3];
+
+         for (int k = 0; k < 3; k++){
+            if (i == 0 || j == 0 || i == h+1 || j == w+1){
+               pz[i][j][k] = 0;
+            }
+            else{
+               pz[i][j][k] = p[i-1][j-1][k];
+            }
+         }
+      }
+   }
+
+   // apply the kernel to the image
+   for (int i = 0; i < h; i++){
+
+      for (int j = 0; j < w; j++){
+
+         for (int k = 0; k < 3; k++){
+
+            float c = 0.0f;
+
+            for (int u = -1; u < 2; u++){
+
+               for (int v = -1; v < 2; v++){
+
+                  c = c + static_cast<double>(ker[u+1][v+1]) * static_cast<double>(pz[i + u + 1][j + v + 1][k]);
+
+               }
+            }
+
+            result.p[i][j][k] = int_min(m, floor(c));
+         }
+      }
+   }
+
+   return result;
+}
+
+ppm_image ppm_image::gaussianblur() const
+{
+   ppm_image result(w, h);
+
+   // define the kernel for the gaussian blur operator
+   float ker[5][5] = {
+      {1.0f/256.0f, 4.0f/256.0f, 6.0f/256.0f, 4.0f/256.0f, 1.0f/256.0f},
+      {4.0f/256.0f, 16.0f/256.0f, 24.0f/256.0f, 16.0f/256.0f, 4.0f/256.0f},
+      {6.0f/256.0f, 24.0f/256.0f, 36.0f/256.0f, 24.0f/256.0f, 6.0f/256.0f},
+      {4.0f/256.0f, 16.0f/256.0f, 24.0f/256.0f, 16.0f/256.0f, 4.0f/256.0f},
+      {1.0f/256.0f, 4.0f/256.0f, 6.0f/256.0f, 4.0f/256.0f, 1.0f/256.0f}
+   };
+
+   // Add zero padders to the original image
+   int*** pz = new int**[h+4];
+   for (int i = 0; i < h+4; i++){
+
+      pz[i] = new int*[w+4];
+
+      for (int j = 0; j < w+4; j++){
+
+         pz[i][j] = new int[3];
+
+         for (int k = 0; k < 3; k++){
+            if (i == 0 || j == 0 || i == 1 || j == 1 || i == h+2 || j == w+2 || i == h+3 || j == w+3){
+               pz[i][j][k] = 0;
+            }
+            else{
+               pz[i][j][k] = p[i-2][j-2][k];
+            }
+         }
+      }
+   }
+
+   // apply the kernel to the image
+   for (int i = 0; i < h; i++){
+
+      for (int j = 0; j < w; j++){
+
+         for (int k = 0; k < 3; k++){
+
+            float c = 0.0f;
+
+            for (int u = -2; u < 3; u++){
+
+               for (int v = -2; v < 3; v++){
+
+                  c = c + static_cast<double>(ker[u+2][v+2]) * static_cast<double>(pz[i + u + 2][j + v + 2][k]);
+
+               }
+            }
+
+            result.p[i][j][k] = int_min(m, floor(c));
+         }
+      }
+   }
+
+   return result;
+}
+
 
 ppm_pixel ppm_image::get(int row, int col) const
 {

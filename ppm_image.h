@@ -42,12 +42,15 @@ namespace agl
      // Return a sub-image having the given top,left coordinate and (width, height)
      ppm_image subimage(int x, int y, int w, int h) const;
 
+     // Return a copy of this image with the given gamma correction applied to it
+     ppm_image gammaCorrect(float gamma) const;
+
+     // Return a copy of this image converted to grayscale
+     ppm_image grayscale() const;
+
      // Replace the portion starting at (row, col) with the given image
      // Clamps the image if it doesn't fit on this image
      void replace(const ppm_image& image, int x, int y);
-
-     // Return a copy of this image with the given gamma correction applied to it
-     ppm_image gammaCorrect(float gamma) const;
 
      // Apply the following calculation to the pixels in 
      // our image and the given image:
@@ -55,8 +58,32 @@ namespace agl
      // Can assume that the two images are the same size
      ppm_image alpha_blend(const ppm_image& other, float amount) const;
 
-     // Return a copy of this image converted to grayscale
-     ppm_image grayscale() const;
+     // Combine a copy of our image and a given image so that every pixel is taken to be the brightest
+     // Assume that the two images are the same size
+     ppm_image lightest(const ppm_image& other) const;
+
+     // Combine a copy of our image and a given image so that every pixel is taken to be the darkest
+     // Assume that the two images are the same size
+     ppm_image darkest(const ppm_image& other) const;
+
+     // Subtract a given image from our image
+     // Assume that the two images are the same size
+     ppm_image difference(const ppm_image& other, float alpha) const;
+
+     // Return a copy of this image whose colors are rotated
+     ppm_image swirlcolor() const;
+
+     // Return a copy of this image whose colors are inverted
+     ppm_image invert(float alpha) const;
+
+     // Return a copy of this image that detects the edges
+     ppm_image sobel(int threshold, bool reverse) const;
+
+     // Return a copy of this image that is applied with 5*5 Gaussian smoothing
+     ppm_image gaussianblur() const;
+
+     // Return a copy of this image that is sharpened
+     ppm_image sharpen() const;
 
      // Get the pixel at index (row, col)
      ppm_pixel get(int row, int col) const;
