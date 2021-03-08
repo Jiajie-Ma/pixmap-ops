@@ -97,7 +97,7 @@ Apply the canonical linear function to the pixels in this image and another imag
 
 Original image          |  Blended image (alpha = 0.2)
 :-------------------------:|:-------------------------:
-![haverford evening](images/hceve.png)  |  ![haverford evening with fireworks](results/hcfirework.png)
+![haverford evening](results/gamma-hceve.png)  |  ![haverford evening with fireworks](results/hcfirework.png)
 
 
 *Replace*
