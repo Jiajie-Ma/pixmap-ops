@@ -51,11 +51,11 @@ pixmap-ops/build $ ../bin/pixmap_art
 
 Return a copy of this image resized to the given width and height (Example: resize a 750 \* 1000 image to 1000 \* 750). 
 
-![](cat.png)
+![alt-text-1](cat.png)
 
 Original image (Havercat, photo taken on Oct.16, 2019)            |  Resized image
 :-------------------------:|:-------------------------:
-![](cat.png)  |  ![](/results/fatcat.ppm)
+![alt-text-1](cat.png)  |  ![](/results/fatcat.ppm)
 
 
 
