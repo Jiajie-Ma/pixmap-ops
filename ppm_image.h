@@ -66,17 +66,13 @@ namespace agl
      // Assume that the two images are the same size
      ppm_image darkest(const ppm_image& other) const;
 
-     // Subtract a given image from our image
-     // Assume that the two images are the same size
-     ppm_image difference(const ppm_image& other, float alpha) const;
-
      // Return a copy of this image whose colors are rotated
      ppm_image swirlcolor() const;
 
      // Return a copy of this image whose colors are inverted
      ppm_image invert(float alpha) const;
 
-     // Return a copy of this image that detects the edges
+     // Given a threshold, return a copy of this image that detects the edges (with a specified color of edge (dark/bright))
      ppm_image sobel(int threshold, bool reverse) const;
 
      // Return a copy of this image that is applied with 5*5 Gaussian smoothing

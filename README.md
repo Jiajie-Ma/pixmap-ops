@@ -79,7 +79,7 @@ Return a copy of this image with the given gamma correction applied to it.
 
 Original image (Haverford evening, photo taken in 2019)            |  Corrected image (gamma = 0.6)
 :-------------------------:|:-------------------------:
-![haverford evening](images/hceve.png)  |  ![corrected haverford evening](results/ghceve.png)
+![haverford evening](images/hceve.png)  |  ![corrected haverford evening](results/gamma-hceve.png)
 
 
 *Grayscale*
@@ -103,7 +103,7 @@ Original image          |  Blended image (alpha = 0.2)
 *Replace*
 Replace the portion starting at (row, col) with the given image. Clamps the image if it doesn't fit on this image.
 
-Original image          |  Blended image (alpha = 0.2)
+Original image          |  Result image (replaced after resizing and alpha blend)
 :-------------------------:|:-------------------------:
 ![shanghai](images/shanghai.png)  |  ![shanghai with fireworks](results/shfirework.png)
 
@@ -152,7 +152,7 @@ Original image        |  Result image (threshold = 120, edge color = bright)
 
 *Gaussian* *Blur*
 
-Return a copy of this image that is applied with 5 \* 5 Gaussian smoothing.
+Return a copy of this image that is applied with 5 \* 5 Gaussian smoothing (zoom in to see the difference).
 
 Original image        |  Result image
 :-------------------------:|:-------------------------:
@@ -160,7 +160,7 @@ Original image        |  Result image
 
 *Sharpen*
 
-Return a copy of this image that is sharpened
+Return a copy of this image that is sharpened (zoom in to see the difference).
 
 Original image (Yin, drawn in summer, 2020)       |  Result image
 :-------------------------:|:-------------------------:
