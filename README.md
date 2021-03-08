@@ -105,7 +105,7 @@ Replace the portion starting at (row, col) with the given image. Clamps the imag
 
 Original image          |  Result image (replaced after resizing and alpha blend)
 :-------------------------:|:-------------------------:
-![shanghai](images/shanghai.png)  |  ![shanghai with fireworks](results/shfirework.png)
+![shanghai](images/shanghai.png)  |  ![shanghai with fireworks](results/shfireworks.png)
 
 
 ### Added operators
