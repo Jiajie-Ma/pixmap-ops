@@ -421,36 +421,6 @@ ppm_image ppm_image::lightest(const ppm_image& other) const
    return result;
 }
 
-ppm_image ppm_image::difference(const ppm_image& other, float alpha) const
-{
-   // Return the original image if the inputs are not legal
-   try{
-      if (alpha < 0){
-          throw "WARNING: the given alpha for difference is supposed to be nonnegative!";
-      }
-   } catch (const char* msg) {
-      std::cout << msg << std::endl;
-      std::cout << alpha << " is given as for difference and the original image is returned." << std::endl << std::endl;
-      return *this;
-   }
-
-   ppm_image result(w,h);
-
-   // for each pixel, subtract the rgb values between the two images
-   for (int i = 0; i < h; i++)
-   {
-      for (int j = 0; j < w; j++)
-      {
-         for (int k = 0; k < 3; k++)
-         {
-            result.p[i][j][k] = int_max(0, floor(static_cast<double>(this->p[i][j][k]) - alpha * static_cast<double>(other.p[i][j][k])));
-         }
-      }
-   }
-
-   return result;
-}
-
 ppm_image ppm_image::gammaCorrect(float gamma) const
 {
    ppm_image result(w, h);
@@ -552,7 +522,7 @@ ppm_image ppm_image::invert(float alpha) const
       {
          for (int k = 0; k < 3; k++)
          {
-            result.p[i][j][k] = int_min(0, floor(m - static_cast<double>(this->p[i][j][k]) * alpha));
+            result.p[i][j][k] = int_max(0, floor(m - static_cast<double>(this->p[i][j][k]) * alpha));
          }
       }
    }
