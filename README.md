@@ -53,7 +53,7 @@ Return a copy of this image resized to the given width and height (Example: resi
 
 Original image (Havercat, photo taken on Oct.16, 2019)            |  Resized image
 :-------------------------:|:-------------------------:
-![](images/cat.png)  |  ![](/results/fatcat.ppm)
+![](cat.png)  |  ![](/results/fatcat.ppm)
 
 
 
