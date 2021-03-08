@@ -51,10 +51,9 @@ pixmap-ops/build $ ../bin/pixmap_art
 
 Return a copy of this image resized to the given width and height (Example: resize a 750 \* 1000 image to 1000 \* 750). 
 
-<p float="center">
-  <img src="/images/cat.ppm" width="100" />
-  <img src="/results/fatcat.png" width="100" /> 
-</p>
+Original image (Havercat, photo on Oct.16, 2019)            |  Solarized Ocean
+:-------------------------:|:-------------------------:
+![](/images/cat.ppm)  |  ![](/results/fatcat.ppm)
 
 
 
