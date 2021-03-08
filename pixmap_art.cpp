@@ -82,7 +82,7 @@ int main(int argc, char** argv)
     // Replace a fraction of sky in the shanghai image with fireworks (after resizing and alpha blended)
     ppm_image shnight = shanghai.subimage(0, 0, 280, 210);
     ppm_image smallfirework = firework.resize(280, 215);
-    ppm_image shfirework = shnight.alpha_blend(smallfirework, 0.5);
+    ppm_image shfirework = shnight.alpha_blend(smallfirework, 0.7);
     shanghai.replace(shfirework, 0, 0);
     shanghai.save("../results/shfirework.ppm");
 
