@@ -51,11 +51,11 @@ ppm_image::ppm_image(int width, int height)
 {
    try{
       if (width <= 0 || height <= 0){
-          throw "WARNING: width and height a image is supposed to be positive!";
+          throw "WARNING: width and height of a image is supposed to be positive!";
       }
    } catch (const char* msg) {
       std::cout << msg << std::endl;
-      std::cout << width << ", " << height << "are given to initialize a ppm image." << std::endl;
+      std::cout << width << ", " << height << " are given to initialize a ppm image." << std::endl << std::endl;
    }
    // set all member variables except w and h by default
    format = "P3";
@@ -138,7 +138,7 @@ bool ppm_image::load(const std::string& filename)
    ifstream file(filename);
    if (!file)
    {
-      cout << "Cannot load file: " << filename << endl;
+      cout << "ERROR: Cannot load file: " << filename << endl << std::endl;
       return false;
    }
    
@@ -170,6 +170,11 @@ bool ppm_image::load(const std::string& filename)
 
 bool ppm_image::save(const std::string& filename) const
 {
+   if (w == 0 || h == 0){
+      cout << "ERROR: The image has 0 width or 0 height. Failed to save as a valid image." << filename << endl << std::endl;
+      return false;
+   }
+
    ofstream file(filename);
 
    // write the format, width, height, and maximum color value of the image
@@ -211,7 +216,7 @@ bool ppm_image::save(const std::string& filename) const
       }
    } catch (const char* msg) {
       std::cout << msg << std::endl;
-      std::cout << width << ", " << height << " are given to resize a image." << std::endl;
+      std::cout << width << ", " << height << " are given to resize a image and the original image is returned." << std::endl << std::endl;
       return *this;
    }
 
@@ -277,7 +282,7 @@ ppm_image ppm_image::subimage(int startx, int starty, int width, int height) con
       }
    } catch (const char* msg) {
       std::cout << msg << std::endl;
-      std::cout << startx << ", " << starty << " are given as the top left corner for a subimage." << std::endl;
+      std::cout << startx << ", " << starty << " are given as the top left corner for a subimage and the original image is returned." << std::endl << std::endl;
       return *this;
    }
 
@@ -315,7 +320,7 @@ void ppm_image::replace(const ppm_image& image, int startx, int starty)
       }
    } catch (const char* msg) {
       std::cout << msg << std::endl;
-      std::cout << startx << ", " << starty << " are given as coordinate for an image with (width, height) = " << w << ", " << h << "." << std::endl;
+      std::cout << startx << ", " << starty << " are given as coordinate for an image with (width, height) = " << w << ", " << h << " and the original image is returned." << std::endl << std::endl;
       return ;
    }
 
@@ -358,7 +363,7 @@ ppm_image ppm_image::alpha_blend(const ppm_image& other, float alpha) const
       }
    } catch (const char* msg) {
       std::cout << msg << std::endl;
-      std::cout << alpha << " is given as for blend." << std::endl;
+      std::cout << alpha << " is given as for blend and the original image is returned" << std::endl << std::endl;
       return *this;
    }
 
@@ -425,7 +430,7 @@ ppm_image ppm_image::difference(const ppm_image& other, float alpha) const
       }
    } catch (const char* msg) {
       std::cout << msg << std::endl;
-      std::cout << alpha << " is given as for difference." << std::endl;
+      std::cout << alpha << " is given as for difference and the original image is returned." << std::endl << std::endl;
       return *this;
    }
 
@@ -534,7 +539,7 @@ ppm_image ppm_image::invert(float alpha) const
       }
    } catch (const char* msg) {
       std::cout << msg << std::endl;
-      std::cout << alpha << " is given as for invert." << std::endl;
+      std::cout << alpha << " is given as for invert and the original image is returned." << std::endl << std::endl;
       return *this;
    }
 
@@ -809,11 +814,11 @@ void ppm_image::set(int row, int col, const ppm_pixel& c)
    // test the legality of the inputs
    try{
       if (c.r < 0 || c.g < 0 || c.b < 0){
-          throw "WARNING: an RGB value is supposed to be positive!";
+          throw "WARNING: an RGB value is supposed to be non-negative!";
       }
    } catch (const char* msg) {
       std::cout << msg << std::endl;
-      std::cout << c.r << ", " << c.g << ", " << c.b << " is given to set a pixel." << std::endl;
+      std::cout << c.r << ", " << c.g << ", " << c.b << " is given to set a pixel." << std::endl << std::endl;
    }
 
    // cap the RGB value with the maximum color value

@@ -45,7 +45,18 @@ pixmap-ops/build $ ../bin/pixmap_art
 
 ## Image operators
 
-TODO: Document the features of your PPM image class here. Include example images.
+### Required operators
+
+*Resize*
+
+Return a copy of this image resized to the given width and height (Example: resize a 750 \* 1000 image to 1000 \* 750). 
+
+<p float="center">
+  <img src="/images/cat.ppm" width="100" />
+  <img src="/results/fatcat.png" width="100" /> 
+</p>
+
+
 
 ## Results
 

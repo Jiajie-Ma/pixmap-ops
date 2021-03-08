@@ -5,7 +5,8 @@ using namespace agl;
 
 int main(int argc, char** argv)
 {
-   ppm_image image;
+   ppm_image image(0,0);
+   image.save("error.ppm");
    image.load("../images/feep.ppm");
    image.save("feep-test-save.ppm"); // should match original
    
