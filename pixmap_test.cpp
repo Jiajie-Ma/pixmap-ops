@@ -5,8 +5,7 @@ using namespace agl;
 
 int main(int argc, char** argv)
 {
-   ppm_image image(0,0);
-   image.save("error.ppm");
+   ppm_image image;
    image.load("../images/feep.ppm");
    image.save("feep-test-save.ppm"); // should match original
    
@@ -14,7 +13,7 @@ int main(int argc, char** argv)
    cout << "loaded feep: " << image.width() << " " << image.height() << endl;
 
    // test: copy constructor
-   ppm_image copy(image); 
+   ppm_image copy = image; 
    copy.save("feep-test-copy.ppm"); // should match original and load into gimp
 
    // test: assignment operator
