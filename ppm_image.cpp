@@ -647,6 +647,37 @@ ppm_image ppm_image::sobel(int threshold, bool reverse) const
       }
    }
 
+   // clean up the memory
+   for (int i = 0; i < h+2; i++)
+   {
+      for (int j = 0; j < w+2; j++)
+      {
+         delete[] pz[i][j];
+      }
+      delete[] pz[i];
+   }
+   delete[] pz;
+
+   for (int i = 0; i < h; i++)
+   {
+      for (int j = 0; j < w; j++)
+      {
+         delete[] px[i][j];
+      }
+      delete[] px[i];
+   }
+   delete[] px;
+
+   for (int i = 0; i < h; i++)
+   {
+      for (int j = 0; j < w; j++)
+      {
+         delete[] py[i][j];
+      }
+      delete[] py[i];
+   }
+   delete[] py;
+
    return result;
 }
 
@@ -704,6 +735,17 @@ ppm_image ppm_image::sharpen() const
          }
       }
    }
+
+   // clean up the memory
+   for (int i = 0; i < h+2; i++)
+   {
+      for (int j = 0; j < w+2; j++)
+      {
+         delete[] pz[i][j];
+      }
+      delete[] pz[i];
+   }
+   delete[] pz;
 
    return result;
 }
@@ -764,6 +806,17 @@ ppm_image ppm_image::gaussianblur() const
          }
       }
    }
+
+   // clean up the memory
+   for (int i = 0; i < h+4; i++)
+   {
+      for (int j = 0; j < w+4; j++)
+      {
+         delete[] pz[i][j];
+      }
+      delete[] pz[i];
+   }
+   delete[] pz;
 
    return result;
 }

@@ -14,7 +14,7 @@ int main(int argc, char** argv)
    cout << "loaded feep: " << image.width() << " " << image.height() << endl;
 
    // test: copy constructor
-   ppm_image copy = image; 
+   ppm_image copy(image); 
    copy.save("feep-test-copy.ppm"); // should match original and load into gimp
 
    // test: assignment operator
